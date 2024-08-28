@@ -1,0 +1,76 @@
+#This scenario does not need any provisioning since UDR is being simulated by DTG
+#FT can not be implemented with a curl client, because it needs also a server
+
+Feature: UDR Sends SMF Selection Data Change Notification
+
+Scenario: Default callback handler initialization
+  Given callback request to server number 2 type AMF_HTTP
+  Given callback request path prefix /sdmDataChange
+  Given callback request with before key imsi-
+  Given callback request with after key /
+  Given action name is default-smfselectdata-change-notification-callback-amf2
+  When we receive callback request
+  Then we send default response with status code 204
+
+Scenario: Send UDR-DataChangeNotification-AmData
+  Given target type is UDM_HTTP
+  Given target tag is HTTP_2
+  Given path is /nudm-notifications/v2/sdm
+  Given request header is Content-Type:application/json
+  Given request content is
+  """
+  {
+    "ueId": "imsi-<imsi>",
+    "originalCallbackReference": ["<AMF_SERVER_SCHEME(2)>://<AMF_SERVER_ADDRESS(2)>:<AMF_SERVER_PORT(2)>/sdmDataChange/imsi-<imsi>/"],
+    "notifyItems": [{
+      "resourceId": "http://udrsim:9082/nudr-dr/v1/subscription-data/imsi-<imsi>/111222/provisioned-data/smf-selection-subscription-data",
+      "changes": [
+	      {
+    	    "op": "REPLACE",
+   	      "path": "/subscribedSnssaiInfos/dnnInfos/defaultDnnIndicator",
+    	    "origValue": true,
+    	    "newValue": false
+        },
+  	    {
+          "op": "REPLACE",
+          "path": "/subscribedSnssaiInfos/dnnInfos/dnn",
+          "origValue": "ericsson-network",
+          "newValue": "ericsson-5g-network"
+        },
+      	{
+          "op": "REPLACE",
+          "path": "/subscribedSnssaiInfos/dnnInfos/iwkEpsInd",
+          "origValue": true,
+          "newValue": false
+        },
+        {
+          "op": "REPLACE",
+          "path": "/subscribedSnssaiInfos/dnnInfos/ladnIndicator",
+          "origValue": false,
+          "newValue": true
+        },
+        {
+          "op": "REPLACE",
+          "path": "/subscribedSnssaiInfos/dnnInfos/lboRoamingAllowed",
+          "origValue": true,
+          "newValue": false
+        },
+        {
+          "op": "REPLACE",
+          "path": "/subscribedSnssaiInfos/singleNssai/sd",
+          "origValue":  "000001",
+          "newValue":  "000011"
+         },
+        {
+          "op": "REPLACE",
+          "path": "/subscribedSnssaiInfos/singleNssai/sst",
+          "origValue": 2,
+          "newValue": 1
+        }
+      ]
+    }]
+  }
+  """
+  When we send POST request
+  Then we expect response status code 204
+  Then we expect response time less than 2000 milliseconds

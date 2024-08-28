@@ -1,0 +1,20 @@
+<project xmlns:tag0="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+   <groupId>com.ericsson.dtg.udm</groupId>
+   <artifactId>dtg-traffic-scenarios-udm</artifactId>
+   <version>3.104.2-SNAPSHOT</version>
+
+   <distributionManagement>
+      <repository>
+         <id>jcat-arm-release</id>
+         <name>jcat-arm-release</name>
+         <url>https://arm.rnd.ki.sw.ericsson.se/artifactory/proj-jcat-release-local</url>
+      </repository>
+      <snapshotRepository>
+         <id>jcat-arm-snapshot</id>
+         <name>jcat-arm-snapshot</name>
+         <url>https://arm.rnd.ki.sw.ericsson.se/artifactory/proj-jcat-dev-local</url>
+      </snapshotRepository>
+   </distributionManagement>
+</project>
